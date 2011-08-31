@@ -1,0 +1,73 @@
+By Stéphane Erard <stephane.erard@gmail.com>
+
+Add XHProf easing to your Diem project.
+
+
+Abstract :
+
+  XHProf is a php profiling extension.
+  This extension has been created by Facebook alongside with their HipHop PHP-to-C++ compiler.
+  
+  This extension can create PNG call-graphs of the execution of your requests.
+  (For this, you need graphviz installed & configured)
+
+- Installation
+
+  . Read http://techportal.ibuildings.com/2009/12/01/profiling-with-xhprof/ to install XHProf on you server
+  
+  . For all your symfony applications, you have to edit the filters.yml in /apps/$app/config/filters.yml.
+    Add these two lines just after execution: ~
+--
+dm_xhprof:    
+  class: dmXhProfFilter
+--
+
+  So you file will look like this :
+  
+--
+rendering:    ~
+
+remember_me:  ~
+
+security:     ~
+
+dm_init:      ~
+  
+cache:        ~
+
+dm_xhprof:    
+  class: dmXhProfFilter
+
+execution:    ~
+--
+  
+  This will make the dmXhprof filter being executed at first.
+
+
+
+- Configuration
+
+  In your app.yml (on both applications), you have to add some configurations:
+  
+--
+all:
+  xhprof: 
+    enabled: true
+    level: 2
+    
+dev:
+  xhprof:
+    outputlink: true
+
+prod: 
+  xhprof:
+    outputlink: false
+--
+ 
+ 
+- How it works
+
+  The filter does all the job :
+    - it looks if it has been enabled in app.yml
+    - if so, it registers a listener for the sf.context.end event to save the profile run
+    - if it is configured to, it will output a link to the run.
