@@ -2,7 +2,7 @@
 
 /**
  * dmXhprofPlugin configuration.
- * 
+ *
  * @package     dmXhprofPlugin
  * @subpackage  config
  * @author      Your name here
@@ -10,12 +10,18 @@
  */
 class dmXhprofPluginConfiguration extends sfPluginConfiguration
 {
-  const VERSION = '1.0.0-DEV';
+	const VERSION = '1.0.0-DEV';
 
-  /**
-   * @see sfPluginConfiguration
-   */
-  public function initialize()
-  {
-  }
+	/**
+	 * @see sfPluginConfiguration
+	 */
+	public function initialize()
+	{
+		$this->enableModules();
+	}
+	
+	protected function enableModules()
+	{
+		sfConfig::set('sf_enabled_modules', array_unique(array_merge(array('xhProfilingRunAdmin'), sfConfig::get('sf_enabled_modules', array()))));
+	}
 }
